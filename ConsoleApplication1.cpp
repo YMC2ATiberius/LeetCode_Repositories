@@ -67,8 +67,8 @@ int main()
         , {'.', '.', '.', '.', '8', '.', '.', '7', '9'} };
     bool result = isValidSudoku(board);*/
 
-    
-    bool result = isMatch("aa", "*");
+    vector<int> nums = { 1,2,3 };
+    vector<vector<int>> result = permuteUnique_Swap(nums);
     cout << "endl" << endl;
 
 

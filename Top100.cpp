@@ -1275,7 +1275,7 @@ string multiply(string num1, string num2) {
 }
 
 // 45. Wildcard Matching
-bool isMatch(string s, string p) {
+bool isMatchWildcard(string s, string p) {
 	int star = -1;		// '*' 出现的位置
 	int range = -2;		// '*' 所代表的范围的结尾（不含本身）
 
@@ -1307,7 +1307,7 @@ bool isMatch(string s, string p) {
 }
 
 // 46. Regular Expression Matching
-bool isMatch(string s, string p) {
+bool isMatchRegular(string s, string p) {
 	vector<bool> temp(p.length() + 1, false);
 	vector<vector<bool>> dp(s.length() + 1, temp);
 
@@ -1339,6 +1339,51 @@ bool isMatch(string s, string p) {
 }
 
 // 47. Permutations II
-vector<vector<int>> permuteUnique(vector<int>& nums) {
+vector<vector<int>> permuteUnique_Backtracking(vector<int>& nums) {
 	vector<vector<int>> result;
+	if (nums.empty())	return result;
+	
+	std::sort(nums.begin(), nums.end());
+	vector<bool> isUsed(nums.size(), false);
+	vector<int> item;
+	DFS_permute(nums, isUsed, item, result);
+	return result;
+}
+
+void DFS_permute(vector<int>& nums, vector<bool>& isUsed, vector<int> item, vector<vector<int>>& result) {
+	if (item.size() == nums.size()) {
+		result.push_back(item);
+		return;
+	}
+	for (int i = 0; i < nums.size(); i++) {
+		if (isUsed[i])	continue;	
+		// when a number has the same value with its previous, we can use this number only if his previous is used
+		if (i > 0 && nums[i] == nums[i - 1] && !isUsed[i - 1])	continue;
+		isUsed[i] = true;
+		item.push_back(nums[i]);
+		DFS_permute(nums, isUsed, item, result);
+		item.pop_back();	
+		isUsed[i] = false;
+	}
+}
+
+// 交换法
+vector<vector<int>> permuteUnique_Swap(vector<int>& nums) {
+	vector<vector<int>> result;
+	if (nums.empty())	return result;
+	Swap_permute(0, nums, result);
+	return result;
+}
+
+void Swap_permute(int begin, vector<int> nums, vector<vector<int>>& result) {
+	
+	if (begin == nums.size()) {
+		result.push_back(nums);
+		return;
+	}
+	for (int i = begin; i < nums.size(); i++) {
+		if (nums[i] == nums[begin] && i != begin)	continue;
+		swap(nums[begin], nums[i]);
+		Swap_permute(begin + 1, nums, result);
+	}
 }
