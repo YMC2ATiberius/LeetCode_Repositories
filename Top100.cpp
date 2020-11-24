@@ -1387,3 +1387,53 @@ void Swap_permute(int begin, vector<int> nums, vector<vector<int>>& result) {
 		Swap_permute(begin + 1, nums, result);
 	}
 }
+
+// 48. Pow(x,n)
+// O(nlogN) 分治法
+double myPow(double x, int n) {
+	if (n == 0)	return 1;
+	if (n < 0) {
+		x = 1 / x;
+		if (n == INT_MIN) {
+			n = INT_MAX;			// INT_MIN 没有对应的非负数
+			return x * myPow(x, n);
+		}
+		n = -n;		
+	}
+	return (n & 1) ? (x * myPow(x * x, n / 2)) : myPow(x * x, n / 2);
+}
+
+// 49. N皇后
+vector<vector<string>> solveNQueens(int n) {
+	vector<vector<string>> result;
+	vector<string> item(n, string(n, '.'));
+	nQueensSolver(0, n, item, result);
+	return result;
+}
+
+void nQueensSolver(int row, int n, vector<string>& item, vector<vector<string>>& result) {
+	if (row == n) {
+		result.push_back(item);
+		return;
+	}
+	for (int col = 0; col < n; col++) {
+		item[row][col] = 'Q';
+		if (isValidQueen(item, row, col, n)) {
+			nQueensSolver(row + 1, n, item, result);
+		}
+		item[row][col] = '.';
+	}
+}
+
+bool isValidQueen(vector<string> item, int row, int col, int n) {
+	for (int i = 0; i < row; i++) {
+		if (item[i][col] == 'Q')	return false;
+	}
+	for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
+		if (item[i][j] == 'Q')	return false;
+	}
+	for (int i = row - 1, j = col + 1; i >= 0 && j < n; i--, j++) {
+		if (item[i][j] == 'Q')	return false;
+	}
+	return true;
+}
