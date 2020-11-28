@@ -67,8 +67,9 @@ int main()
         , {'.', '.', '.', '.', '8', '.', '.', '7', '9'} };
     bool result = isValidSudoku(board);*/
 
-    vector<int> nums = { 1,2,3 };
-    vector<vector<int>> result = permuteUnique_Swap(nums);
+    
+    vector<vector<int>> matrix = { {1,2,3, 4},{5,6,7,8},{9,10,11,12} };
+    vector<int> result = spiralOrder(matrix);
     cout << "endl" << endl;
 
 

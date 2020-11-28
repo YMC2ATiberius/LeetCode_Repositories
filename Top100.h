@@ -272,3 +272,8 @@ double myPow(double x, int n);
 
 // 49. N皇后
 vector<vector<string>> solveNQueens(int n);
+void nQueensSolver(int row, int n, vector<string>& item, vector<vector<string>>& result);
+bool isValidQueen(vector<string> item, int row, int col, int n);
+
+// 50. Spiral Matrix
+vector<int> spiralOrder(vector<vector<int>>& matrix);

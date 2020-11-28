@@ -1,7 +1,5 @@
 #include <Top100.h>
 
-
-
 using namespace std;
 /*
  *	新建变量：TreeNode a(23);  名字即为a
@@ -1436,4 +1434,42 @@ bool isValidQueen(vector<string> item, int row, int col, int n) {
 		if (item[i][j] == 'Q')	return false;
 	}
 	return true;
+}
+
+// 50. Spiral Matrix
+vector<int> spiralOrder(vector<vector<int>>& matrix) {
+	vector<int> result;
+	int rowBegin = 0, rowEnd = matrix.size() - 1;
+	int colBegin = 0, colEnd = matrix[0].size() - 1;
+
+	while (rowBegin <= rowEnd && colBegin <= colEnd) {
+		// 向左
+		for (int i = colBegin; i <= colEnd; i++) {
+			result.push_back(matrix[rowBegin][i]);
+		}
+		rowBegin++;
+
+		// 向下
+		for (int i = rowBegin; i <= rowEnd; i++) {
+			result.push_back(matrix[i][colEnd]);
+		}
+		colEnd--;
+
+		// 向左(仅在当前行违背扫描过时执行：rowBegin <= rowEnd)
+		if (rowBegin <= rowEnd) {
+			for (int i = colEnd; i >= colBegin; i--) {
+				result.push_back(matrix[rowEnd][i]);
+			}
+			rowEnd--;
+		}
+		
+		// 向上(仅在当前列违背扫描过时执行：colBegin <= colEnd)
+		if (colBegin <= colEnd) {
+			for (int i = rowEnd; i <= rowBegin; i--) {
+				result.push_back(matrix[i][colBegin]);
+			}
+			colBegin++;
+		}		
+	}
+	return result;
 }
