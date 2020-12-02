@@ -1473,3 +1473,95 @@ vector<int> spiralOrder(vector<vector<int>>& matrix) {
 	}
 	return result;
 }
+
+// 51. Add Strings
+string addStrings(string num1, string num2) {
+	if (num1.empty() && num2.empty()) {
+		return "";
+	}
+	int m = num1.length(), n = num2.length();
+	int resultLength;
+	if (m < n) {
+		swap(num1, num2);
+		swap(m, n);
+	}
+	resultLength = m + 1;
+	
+	vector<int> addOn(resultLength, 0);
+	for (int i = 0; i < n; i++) {
+		addOn[resultLength - 1 - i] = num1[m - 1 - i] + num2[n - 1 - i] - 2 * '0';
+	}
+	for (int i = 0; i < m - n; i++) {
+		addOn[i + 1] = num1[i] - '0';
+	}
+
+	for (int i = resultLength - 1; i >= 0; i--) {
+		if (addOn[i] >= 10) {
+			addOn[i] = addOn[i] % 10;
+			addOn[i - 1]++;
+		}
+	}
+
+	string result = "";
+	int begin = addOn[0] == 0 ? 1 : 0;
+	while (begin < resultLength)
+	{
+		result += '0' + addOn[begin];
+		begin++;
+	}
+	
+	return result;
+}
+
+// 52. LRU Cache
+int capacity;
+unordered_map<int, DbListNode*>  keyMap;
+DbListNode Head(make_pair(0, 0)), Tail(make_pair(0, 0), &Head);
+void LRUCache(int val) {
+	capacity = val;		
+	Head.next = &Tail;
+}
+
+int get(int key) {
+	if (keyMap.find(key) != keyMap.end()) {
+		DbListNode* tmp = keyMap[key];
+		if (tmp == Head.next)	return tmp->val.second;
+		tmp->front->next = tmp->next;
+		tmp->next->front = tmp->front;
+
+		tmp->next = Head.next;
+		tmp->front = &Head;
+		Head.next->front = tmp;
+		Head.next = tmp;
+		return tmp->val.second;
+	}
+	else {
+		return -1;
+	}
+}
+
+void put(int key, int value) {
+	// 键值对已存在 则更新
+	if (keyMap.find(key) != keyMap.end()) {
+		get(key);
+		keyMap[key]->val.second = value;
+	}
+	else {
+		if (keyMap.size() >= capacity) {
+			// 删除尾节点 获得key
+			DbListNode* endNode = Tail.front;
+			endNode->front->next = &Tail;
+			Tail.front = endNode->front;
+			// 更新表
+			keyMap.erase(endNode->val.first);
+			delete(endNode);
+		}
+		// 插入新节点到Head后
+		DbListNode* node = new DbListNode(make_pair(key, value));
+		keyMap[key] = node;
+		node->next = Head.next;
+		Head.next->front = node;
+		Head.next = node;
+		node->front = &Head;
+	}	
+}

@@ -32,6 +32,17 @@ struct ListNode {
 	
 };
 
+struct DbListNode {
+	pair<int,int> val;
+	DbListNode* front;
+	DbListNode* next;
+	DbListNode() : val(), front(nullptr), next(nullptr) {}
+	DbListNode(pair<int, int> x) : val(x), front(nullptr), next(nullptr) {}
+	DbListNode(pair<int, int> x, DbListNode* front) : val(x), front(front), next(nullptr) {}
+	DbListNode(pair<int, int> x, DbListNode* front, DbListNode* next) : val(x), front(front), next(next) {}
+	
+};
+
 // 高级数据结构 Tried树
 #define TRIE_MAX_CHAR_NUM 26
 struct TrieNode {
@@ -277,3 +288,11 @@ bool isValidQueen(vector<string> item, int row, int col, int n);
 
 // 50. Spiral Matrix
 vector<int> spiralOrder(vector<vector<int>>& matrix);
+
+// 51. Add Strings
+string addStrings(string num1, string num2);
+
+// 52. LRU Cache
+void LRUCache(int capacity);
+int get(int key);
+void put(int key, int value);
