@@ -1565,3 +1565,27 @@ void put(int key, int value) {
 		node->front = &Head;
 	}	
 }
+
+// 53. Decode Ways
+// 只要有两个及以上连续的0 结果就是0！
+int numDecodings(string s) {
+	int n = s.length();
+	int bef, pre = 1;
+	int cur = s[n - 1] == '0' ? 0 : 1;
+	//	从尾巴开始
+	for (int i = n - 2; i >= 0; i--) {
+		bef = 0;
+		swap(pre, bef);
+		swap(cur, pre);
+		if (s[i] != '0') {
+			int num = 10 * (s[i] - '0') + s[i + 1] - '0';
+			if (num >= 1 && num <= 26) {
+				cur = pre + bef;
+			}
+			else {
+				cur = pre;
+			}
+		}				
+	}
+    return cur;
+}
