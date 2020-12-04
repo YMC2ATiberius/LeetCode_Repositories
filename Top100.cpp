@@ -1589,3 +1589,67 @@ int numDecodings(string s) {
 	}
     return cur;
 }
+
+// 54. Number of Islands
+int numIslands(vector<vector<char>>& grid) {
+	int m = grid.size(), n = grid[0].size();
+	vector<vector<int>> mark(m, vector<int>(n, 0));
+	int result = 0;
+	for (int i = 0; i < m; i++) {
+		for (int j = 0; j < n; j++) {
+			if (!mark[i][j]) {
+				mark[i][j] = 1;
+				if (grid[i][j] == '1') {					
+					islandBFS(grid, mark, i,j);
+					result++;
+				}				
+			}			
+		}
+	}
+	return result;
+}
+
+void islandBFS(vector<vector<char>>& grid, vector<vector<int>>& mark, int row, int col) {
+	queue<pair<int, int>> Q;
+	Q.push(make_pair(row, col));
+	vector<int> dx = { 1,0,-1,0 };
+	vector<int> dy = { 0,1,0,-1 };
+	while (!Q.empty()) {
+		int row = Q.front().first, col = Q.front().second;		
+		for (int i = 0; i < 4; i++) {
+			int new_row = row + dx[i];
+			int new_col = col + dy[i];
+			if (new_row >= 0 && new_row < grid.size() && new_col >= 0 && new_col < grid[0].size() && !mark[new_row][new_col]) {
+				mark[new_row][new_col] = 1;
+				if (grid[new_row][new_col] == '1') {
+					Q.push(make_pair(new_row, new_col));
+				}				
+			}
+		}
+		Q.pop();
+	}
+}
+
+// 55. Consecutive Numbers Sum
+int consecutiveNumbersSum(int N) {
+	/* O(N^2) 太慢
+	int count = 1, sum = 0;
+	int i = 1, j = 1;
+	while (j < N && i <= j) {
+		if (sum < N) {
+			sum += j++;
+		}
+		else {
+			if (sum == N)	count++;
+			sum -= i++;
+		} 
+	}
+	return (j == N && sum == N) ? count + 1 : count;*/
+
+	int count = 1;								// 本身 即循环中k=1的情况
+	for (int k = 2; k < sqrt(2 * N); k++) {		// N - k*(k-1)/2 > 0 which implies k < sqrt(2N)
+		if ((N - k * (k - 1) / 2) % k == 0)	
+			count++;
+	}
+	return count;
+}

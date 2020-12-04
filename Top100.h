@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <iostream>
+
 #include <string>
 #include <vector>
 #include <set>
@@ -299,3 +301,10 @@ void put(int key, int value);
 
 // 53. Decode Ways
 int numDecodings(string s);
+
+// 54. Number of Islands
+int numIslands(vector<vector<char>>& grid);
+void islandBFS(vector<vector<char>>& grid, vector<vector<int>>& mark, int row, int col);
+
+// 55. Consecutive Numbers Sum
+int consecutiveNumbersSum(int N);
