@@ -1653,3 +1653,58 @@ int consecutiveNumbersSum(int N) {
 	}
 	return count;
 }
+
+// 56.  Add Two Numbers
+ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+	ListNode *head = new ListNode(0), *p = head;
+	int sum = 0;
+	while (l1 || l2 || sum) {
+		sum += (l1) ? l1->val : 0;
+		sum += (l2) ? l2->val : 0;
+		p->next = new ListNode(sum % 10);
+		sum = sum / 10;
+		p = p->next;
+		if (l1) l1 = l1->next;
+		if (l2) l2 = l2->next;
+	}
+	return head->next;
+}
+
+// 57. Reorder Data in Log Files
+vector<string> reorderLogFiles(vector<string>& logs) {
+	vector<string> result;
+	if (logs.empty()) return result;
+
+	vector<string> digit;
+	map<string, set<string>> letter_ref;
+	for (int i = 0; i < logs.size(); i++) {
+		string s = logs[i];
+		int j = s.find(' ') + 1;
+		if (s[j] - '0' >= 0 && s[j] - '0' <= 9) {
+			digit.push_back(s);
+			continue;
+		}
+		string word = s.substr(j, s.size() - j), ref = s.substr(0, j);
+		if (letter_ref.find(word) != letter_ref.end()) {
+			letter_ref[word].insert(ref);
+		}
+		else {
+			// 如果word相同  按ref排序（set自带）
+			set<string> refs;
+			refs.insert(ref);
+			letter_ref[word] = refs;
+		}		
+	}
+	// map 的遍历
+	for (map<string, set<string>>::iterator it = letter_ref.begin(); it != letter_ref.end(); it++) {
+		// set 的遍历
+		for (string str : it->second) {
+			result.push_back(str + it->first);
+		}		
+	}
+	// 合并
+	for (int i = 0; i < digit.size(); i++) {
+		result.push_back(digit[i]);
+	}	
+	return result;
+}

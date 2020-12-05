@@ -308,3 +308,6 @@ void islandBFS(vector<vector<char>>& grid, vector<vector<int>>& mark, int row, i
 
 // 55. Consecutive Numbers Sum
 int consecutiveNumbersSum(int N);
+
+// 57. Reorder Data in Log Files
+vector<string> reorderLogFiles(vector<string>& logs);
