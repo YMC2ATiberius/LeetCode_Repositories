@@ -311,3 +311,7 @@ int consecutiveNumbersSum(int N);
 
 // 57. Reorder Data in Log Files
 vector<string> reorderLogFiles(vector<string>& logs);
+
+// 58. Text Justification
+vector<string> fullJustify(vector<string>& words, int maxWidth);
+void spaceFill(string& line, int wordNum, int spaceNum);

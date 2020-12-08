@@ -1708,3 +1708,46 @@ vector<string> reorderLogFiles(vector<string>& logs) {
 	}	
 	return result;
 }
+
+// 58. Text Justification
+vector<string> fullJustify(vector<string>& words, int maxWidth) {
+	vector<string> result;
+	string line = words[0];
+	int wordNum = 1,  len = line.size();
+	for (int i = 1; i < words.size(); i++) {
+		if (len + words[i].size() + 1 <= maxWidth) {
+			line += ' ' + words[i];
+			wordNum++;
+			len += words[i].size() + 1;
+		}
+		else {
+			spaceFill(line, wordNum, maxWidth - line.size());
+			result.push_back(line);
+			line = words[i];
+			len = words[i].size();
+			wordNum = 1;
+		}
+	}	
+	result.push_back(line + string (maxWidth - line.size(), ' '));
+	return result;
+}
+// spaceNum: 需要添加的空格总数
+// wordNum: 总词数
+// space: 某位置下放置的空格数
+
+void spaceFill(string &line, int wordNum, int spaceNum) {
+	if (wordNum == 1) {
+		line += string(spaceNum, ' ');
+		return;
+	}
+	int index = 0, space;
+	// 判断条件 改为 index = line.find(' ', index) 可找出每次' ' 的位置
+	while (spaceNum > 0 && --wordNum > 0)
+	{
+		index = line.find(' ', index); 
+		space = ceil((float)spaceNum / (float)wordNum);
+		line.insert(index, string(space, ' '));
+		index += space + 1;
+		spaceNum -= space;
+	}
+}
