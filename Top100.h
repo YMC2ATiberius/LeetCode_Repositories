@@ -315,3 +315,6 @@ vector<string> reorderLogFiles(vector<string>& logs);
 // 58. Text Justification
 vector<string> fullJustify(vector<string>& words, int maxWidth);
 void spaceFill(string& line, int wordNum, int spaceNum);
+
+// 59. Verifying an Alien Dictionary
+bool isAlienSorted(vector<string>& words, string order);

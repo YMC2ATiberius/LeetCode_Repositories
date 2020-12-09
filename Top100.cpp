@@ -1751,3 +1751,30 @@ void spaceFill(string &line, int wordNum, int spaceNum) {
 		spaceNum -= space;
 	}
 }
+
+// 59. Verifying an Alien Dictionary
+/*	
+*	如果有对应特征 现转换为vector一类的结构方便查找
+*	比直接在string里find要快
+*/
+bool isAlienSorted(vector<string>& words, string order) {
+	// 记录a-z的位置 快速查找
+	vector<int> map(26, 0);	
+	for (int i = 0; i < 26; i++) {
+		map[order[i] - 'a'] = i;
+	}
+	for (int n = 0; n < words.size() - 1; n++) {
+		for (int i = 0; i < words[n].size(); i++) {
+			if (i == words[n + 1].size() && i != 0) return false;
+			int x = map[words[n][i] - 'a'];
+			int y = map[words[n + 1][i] - 'a'];
+			if (x == y)
+				continue;
+			else if (x < y)
+				break;
+			else
+				return false;
+		}
+	}	
+	return true;
+}
