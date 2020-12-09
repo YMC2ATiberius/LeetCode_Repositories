@@ -1778,3 +1778,54 @@ bool isAlienSorted(vector<string>& words, string order) {
 	}	
 	return true;
 }
+
+// 60. Integer to English Words
+const vector<string> LESS_THAN_20 = { "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
+											"Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen" };
+const vector<string> TENS = { "", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety" };
+const vector<string> DIGS = { "", "Thousand", "Million", "Billion" };
+string numberToWords(int num) {
+	if (num == 0) return "Zero";
+	// 用数组储存方便使用且简洁 0位放空使位置与数对应！
+	int i = 0;
+	string result = "";
+	while (num > 0) {
+		if (num % 1000 != 0) {
+			if (i != 0)  result = " " + result;
+			result = hunds(num % 1000) + DIGS[i] + result;
+		}
+
+		num = num / 1000;
+		i++;
+	}
+	if (result[result.size() - 1] == ' ')
+		return result.substr(0, result.size() - 1);
+	return result;
+}
+
+string hunds(int num) {
+	if (num == 0)	return "";
+	// 0~20
+	else if (num < 20)	return LESS_THAN_20[num];
+	// 20~100
+	else if (num < 100) {
+		if (num % 10) {
+			return TENS[num / 10] + " " + hunds(num % 10);
+		}
+		else {
+			return TENS[num / 10];
+		}
+		
+	}
+	// 100~999
+	else {
+		if (num % 100) {
+			return LESS_THAN_20[num / 100] + " Hundred " + hunds(num % 100);
+		}
+		else {
+			return LESS_THAN_20[num / 100] + " Hundred";
+		}
+		
+	}
+	
+}

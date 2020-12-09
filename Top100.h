@@ -318,3 +318,7 @@ void spaceFill(string& line, int wordNum, int spaceNum);
 
 // 59. Verifying an Alien Dictionary
 bool isAlienSorted(vector<string>& words, string order);
+
+// 60. Integer to English Words
+string numberToWords(int num);
+string hunds(int num);
