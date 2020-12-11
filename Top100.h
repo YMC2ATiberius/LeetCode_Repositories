@@ -322,3 +322,15 @@ bool isAlienSorted(vector<string>& words, string order);
 // 60. Integer to English Words
 string numberToWords(int num);
 string hunds(int num);
+
+// 61. Meeting Rooms II
+// 法一：优先级队列
+struct cmpInterval {
+	bool operator()(vector<int> x, vector<int> y) {
+		return x[1] > y[1];
+	}
+};
+int minMeetingRooms_PQ(vector<vector<int>>& intervals);
+
+// 法二：拆分
+int minMeetingRooms_SP(vector<vector<int>>& intervals);

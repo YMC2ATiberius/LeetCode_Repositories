@@ -1829,3 +1829,41 @@ string hunds(int num) {
 	}
 	
 }
+
+// 61. Meeting Rooms II
+// 法一：优先级队列
+int minMeetingRooms_PQ(vector<vector<int>>& intervals) {
+	std::sort(intervals.begin(), intervals.end());
+	if (intervals.empty())	return 0;
+	priority_queue<vector<int>, vector<vector<int>>, cmpInterval> rooms;
+	rooms.push(intervals[0]);
+	for (int i = 1; i < intervals.size(); i++) {
+		if (rooms.top()[1] <= intervals[i][0]) {
+			rooms.pop();			
+		}
+		rooms.push(intervals[i]);
+	}
+	return rooms.size();	
+}
+// 法二：拆分
+int minMeetingRooms_SP(vector<vector<int>>& intervals) {
+	vector<int> star, end;
+	for (vector<int> time : intervals) {
+		star.push_back(time[0]);
+		end.push_back(time[1]);
+	}
+	std::sort(star.begin(), star.end());
+	std::sort(end.begin(), end.end());
+	int number = 0;
+	int i = 0, j = 0;
+	while (i < star.size()) {
+		if (star[i] < end[j]) {
+			number++;			
+		}
+		else {
+			j++;
+		}
+		i++;
+	}
+	return number;
+}
