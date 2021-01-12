@@ -1867,3 +1867,130 @@ int minMeetingRooms_SP(vector<vector<int>>& intervals) {
 	}
 	return number;
 }
+
+// 62. K Closest Points to Origin
+vector<vector<int>> kClosest(vector<vector<int>>& points, int K) {
+	vector<vector<int>> result;
+	map<int, vector<vector<int>>> pointMap;
+	set<int> distance;
+	for (vector<int> point : points) {
+		int dic = point[0] * point[0] + point[1] * point[1];
+		distance.insert(dic);
+		if (pointMap.find(dic) != pointMap.end()) {
+			pointMap[dic].push_back(point);
+		}
+		else {
+			vector<vector<int>> newVec;
+			newVec.push_back(point);
+			pointMap[dic] = newVec;
+		}
+	}
+	set<int>::iterator iter = distance.begin();
+	while (result.size() < K) {
+		for (vector<int> point : pointMap[*iter]) {
+			result.push_back(point);
+		}
+		iter++;
+	}
+	return result;
+}
+//vector<vector<int>> kClosest(vector<vector<int>>& points, int K) {
+//	int len = points.size(), l = 0, r = len - 1;
+//	while (l <= r) {
+//		int mid = quickSortPoints(points, l, r);
+//		if (mid == K)	break;
+//		else if (mid < K) {
+//			l = mid + 1;
+//		}
+//		else {
+//			r = mid - 1;
+//		}
+//	}
+//	vector<vector<int>> result;
+//	for (int i = 0; i < K; i++) {
+//		result.push_back(points[i]);
+//	}
+//	return result;
+//}
+//
+//int quickSortPoints(vector<vector<int>>& points, int& l, int& r) {
+//	vector<int> pivot = points[l];
+//	while (l < r) {
+//		while (l < r && compDic(points[r], pivot) >= 0)	r--;
+//		points[l] = points[r];
+//		while (l < r && compDic(points[l], pivot) <= 0)	l++;
+//		points[r] = points[l];
+//	}
+//	points[l] = pivot;
+//	return l;
+//}
+//
+//int compDic(vector<int> p1, vector<int> p2) {
+//	return p1[0] * p1[0] + p1[1] + p1[1] - p2[0] * p2[0] - p2[1] * p2[1];
+//}
+
+// 63. Critical Connections in a Network
+const int NoRank = -2;
+vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+	// 图的构建
+	/*
+	编译器不支持：
+	vector<int> graph[n];
+	for (auto& conn : connections) {
+		graph[conn[0]].push_back(conn[1]);
+		graph[conn[1]].push_back(conn[0]);
+	}*/
+	vector<vector<int>> graph;
+	for (int i = 0; i < n; i++) {
+		vector<int> temp;
+		graph.push_back(temp);
+	}
+	
+	for (vector<int> conn : connections) {
+		graph[conn[0]].push_back(conn[1]);
+		graph[conn[1]].push_back(conn[0]);
+	}
+	
+	// rank组构建
+	/*
+	用数组代替会快点
+	int ranks[n];
+	fill_n(ranks, n, NO_RANK);	// 填充
+	*/
+	vector<int> nodeRank(n, NoRank);
+	// 结果
+	vector<vector<int>> result;
+	
+	int index = 0;
+
+	// DFS
+	DFSConnections(graph, n, 0, 0, nodeRank, result);
+	return result;
+}
+
+int DFSConnections(vector<vector<int>> graph, int n, int node, int rank, 
+					vector<int>& nodeRank, vector<vector<int>>& result) {
+	// 找到环
+	if (nodeRank[node] != NoRank) {
+		return nodeRank[node];
+	}
+
+	int lowestRank = rank;
+	nodeRank[node] = rank;
+	for (int nextNode : graph[node]) {
+		if (nodeRank[nextNode] == rank - 1 || nodeRank[nextNode] == n) {
+			// 避免父子循环 或 到达结尾
+			continue;
+		}
+		int nextNodeRank = DFSConnections(graph, n, nextNode, rank + 1, nodeRank, result);
+		lowestRank = min(lowestRank, nextNodeRank);
+		// 无环，保存结果
+		if (nextNodeRank > rank) {
+			result.push_back({ node, nextNode });
+		}
+	}
+
+	//
+	nodeRank[node] = n;
+	return lowestRank;
+}
