@@ -334,3 +334,30 @@ int minMeetingRooms_PQ(vector<vector<int>>& intervals);
 
 // 法二：拆分
 int minMeetingRooms_SP(vector<vector<int>>& intervals);
+
+// 62. K Closest Points to Origin
+struct cmpDistance {
+	bool operator()(vector<int> x, vector<int> y) {
+		return x[0] * x[0] + x[1] * x[1] < y[0] * y[0] + y[1] * y[1];
+	}
+};
+vector<vector<int>> kClosest(vector<vector<int>>& points, int K);
+
+// 63. Critical Connections in a Network
+vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections);
+int DFSConnections(vector<vector<int>> graph, int n, int node, int rank,
+	vector<int>& nodeRank, vector<vector<int>>& result);
+
+// 64. Insert Delete GetRandom O(1)
+/** Inserts a value to the set. Returns true if the set did not already contain the specified element. */
+bool insert(int val);
+/** Removes a value from the set. Returns true if the set contained the specified element. */
+bool remove(int val);
+/** Get a random element from the set. */
+int getRandom();
+
+// 381. Insert Delete GetRandom O(1) - Duplicates allowed
+/** Inserts a value to the collection. Returns true if the collection did not already contain the specified element. */
+bool insertD(int val);
+bool removeD(int val);
+int getRandomD();

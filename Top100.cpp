@@ -1994,3 +1994,89 @@ int DFSConnections(vector<vector<int>> graph, int n, int node, int rank,
 	nodeRank[node] = n;
 	return lowestRank;
 }
+
+// 380. Insert Delete GetRandom O(1)
+vector<int> values;				// 记录数据
+unordered_map<int, int> VImap;	// 数据-位置 Hash键值对
+/** Inserts a value to the set. Returns true if the set did not already contain the specified element. */
+bool insert(int val) {
+	if (VImap.find(val) != VImap.end()) {
+		return false;
+	}
+	else {
+		values.push_back(val);
+		VImap[val] = values.size() - 1;
+		return true;
+	}
+}
+
+/** Removes a value from the set. Returns true if the set contained the specified element. */
+bool remove(int val) {
+	if (VImap.find(val) != VImap.end()) {
+		int tmpIndex = VImap[val], endIndex = values.size() - 1;
+		// 更改最后一个元素的Index记录
+		VImap[values[endIndex]] = tmpIndex;
+		// 从map和vector删去元素
+		VImap.erase(val);
+		swap(values[tmpIndex], values[endIndex]);
+		values.pop_back();
+		return true;
+	}
+	return false;
+}
+
+/** Get a random element from the set. */
+int getRandom() {
+	return values[rand() % values.size()];
+}
+
+// 381. Insert Delete GetRandom O(1) - Duplicates allowed
+vector<int> valuesD;
+unordered_map<int, set<int>> VImapD;
+ /** Inserts a value to the collection. Returns true if the collection did not already contain the specified element. */
+bool insertD(int val) {
+	bool returnFlag;
+	// 存在
+	if (VImapD.find(val) != VImapD.end()) {
+		returnFlag = false;
+	}
+	// 不存在
+	else {
+		returnFlag = true;
+	}
+	valuesD.push_back(val);
+	VImapD[val].insert(valuesD.size() - 1);
+	return returnFlag;
+}
+
+/** Removes a value from the collection. Returns true if the collection contained the specified element. */
+bool removeD(int val) {
+	// 存在
+	if (VImapD.find(val) != VImapD.end() && VImapD[val].size() != 0) {
+		set<int> tmpIndexs = VImapD[val];
+		int endIndex = valuesD.size() - 1, endVal = valuesD[endIndex];
+		// 如果最后一个元素即为删除元素
+		// 直接删除并返回
+		if (endVal == val) {
+			valuesD.pop_back();
+			VImapD[val].erase(endIndex);
+			return true;
+		}
+		// 否则 更改最后一个元素的Index记录
+		int index = *tmpIndexs.begin();		
+		VImapD[endVal].erase(endIndex);
+		VImapD[endVal].insert(index);
+		
+		// 从map和vector删去目标元素		
+		VImapD[val].erase(index);	
+		swap(valuesD[index], endVal);
+		valuesD.pop_back();
+		return true;
+	}
+	return false;
+}
+
+/** Get a random element from the collection. */
+int getRandomD() {
+	return valuesD[rand() % valuesD.size()];
+}
