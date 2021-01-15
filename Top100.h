@@ -361,3 +361,6 @@ int getRandom();
 bool insertD(int val);
 bool removeD(int val);
 int getRandomD();
+
+// 420. Strong Password Checker
+int strongPasswordChecker(string s);

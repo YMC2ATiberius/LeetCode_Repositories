@@ -2080,3 +2080,80 @@ bool removeD(int val) {
 int getRandomD() {
 	return valuesD[rand() % valuesD.size()];
 }
+
+// 420. Strong Password Checker
+int strongPasswordChecker(string password) {
+	int addTarget = max(0, 6 - (int)password.length()), deleteTarget = max(0, (int)password.length() - 20);
+	int toAdd = 0, toDelete = 0, toReplace = 0, needUp = 1, needLow = 1, needDig = 1;
+
+	// s.length() <= 20
+	for (int l = 0, r = 0; r < password.length(); r++) {	// r!!!
+		if (isupper(password[r]))	needUp = 0;
+		if (islower(password[r])) needLow = 0;
+		if (isdigit(password[r])) needDig = 0;
+
+		if (r - l == 2) {
+			if (password[l] == password[l + 1] && password[l + 1] == password[r]) {
+				// 优先添加
+				if (toAdd < addTarget) {
+					toAdd++;
+					l = r;		// 添加需考虑当前值(l)
+				}
+				else {
+					toReplace++;
+					l = r + 1; // 替换不考虑
+				}
+			}
+			else
+			{
+				l++;
+			}
+			
+		}
+	}
+	if (password.length() <= 20) {
+		return max(toReplace + addTarget, needUp + needLow + needDig);
+	}
+
+	// s.length() > 20
+	toReplace = 0;		// ???????????????
+	// 记录del次数为0 1 2 情况下（vector)
+	// 重复的len长度 及其出现次数（map）
+	vector < unordered_map<int, int> > lenRecs(3);
+	for (int l = 0, r = 0, len; r <= password.length(); r++) {
+		// r=length时 repetition出现在末尾
+		// 或 在s[l] s[r]不等时 进行记录操作
+		if (r == password.length() || password[l] != password[r]) {
+			if ((len = r - l) > 2) {
+				lenRecs[len % 3][len]++;				
+			}
+			l = r;
+		}
+	}
+
+	for (int i = 0, dec, letterNums; i < 3; i++) {
+		for (auto it = lenRecs[i].begin(); it != lenRecs[i].end(); it++) {
+			if (i < 2) {
+				letterNums = i + 1, dec = min(it->second, (deleteTarget - toDelete) / letterNums);
+				toDelete += letterNums * dec;		// dec is the number of repetitions we'll delete from
+				it->second -= dec;					// update number of repetitions left
+
+				// after letters deleted, it fits in the group where (length % 3) == 2
+				if (it->first - letterNums > 2) {
+					lenRecs[2][it->first - letterNums] += dec;
+				}
+			}
+
+			// ?????????????????
+			// record number of replacements needed
+			// note if len is the length of repetition, we need (len / 3) number of replacements
+			toReplace += (it->second) * ((it->first) / 3);
+		}
+		
+	}
+
+	// try to delete multiple of three letters as many as possible
+	int dec = (deleteTarget - toDelete) / 3;
+	toReplace -= dec, toDelete -= dec * 3;
+	return deleteTarget + max(toReplace, needDig + needUp + needLow);
+}
